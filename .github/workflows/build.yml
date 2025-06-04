@@ -77,7 +77,7 @@ jobs:
           bazelrc: |
             build --config=fast
             build --config=stamp
-            build --lto=thin
+            build --copt=-flto=thin
             build --copt=-O${{ matrix.optimizer_level }}
             build --strip=always
             build --linkopt=-fuse-ld=lld
