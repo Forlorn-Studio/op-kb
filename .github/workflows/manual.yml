@@ -50,8 +50,8 @@ jobs:
             - O0, O1, O2, Os, O3, Ofast
             
             **使用说明:**
-            1. 下载对应设备的刷机包
-            2. 在恢复模式中刷入
+            1. 下载对应设备的内核
+            2. 在SukiSU-Ultra中ak3刷入
             3. 重启设备
           repository: FrostRime/op-kb
           draft: false
