@@ -38,14 +38,13 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ needs.generate-timestamp.outputs.timestamp }}
-          name: "统一内核构建 (${{ needs.generate-timestamp.outputs.timestamp }} 北京时间)"
+          name: "统一内核构建（6.6.30） (${{ needs.generate-timestamp.outputs.timestamp }} 北京时间)"
           body: |
             ### 所有设备的内核构建
             **构建时间:** ${{ needs.generate-timestamp.outputs.timestamp }} (UTC+8)
             **包含设备:**
             - oneplus_ace5_pro
             - oneplus_13
-            - oneplus_13t
             
             **优化级别:**
             - O0, O1, O2, Os, O3, Ofast
@@ -54,6 +53,7 @@ jobs:
             1. 下载对应设备的刷机包
             2. 在恢复模式中刷入
             3. 重启设备
+          repository: FrostRime/op-kb
           draft: false
           prerelease: false
           files: |
