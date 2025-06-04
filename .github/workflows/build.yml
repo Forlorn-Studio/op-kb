@@ -83,8 +83,6 @@ jobs:
             build --linkopt=-fuse-ld=lld
             build --compilation_mode=opt
             build --jobs=auto
-            build --action_env=CC=clang
-            build --action_env=CXX=clang++
           
       - name: Configure Git
         run: |
