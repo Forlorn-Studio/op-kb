@@ -48,7 +48,7 @@ jobs:
     
     strategy:
       matrix:
-        FEIL: [ "oneplus_ace5_pro", "oneplus_13", "oneplus_13t" ]
+        FEIL: [ "oneplus_ace5_pro", "oneplus_13" ]
         optimizer_level: [ "0", "1", "2", "s", "3", "fast" ]
       
     steps:
@@ -229,7 +229,7 @@ jobs:
       - name: Build kernel
         run: |
          cd kernel_workspace/kernel_platform
-         tools/bazel run --config=fast --config=stamp --lto=thin --copt=-O${{ matrix.optimizer_level }} --jobs=$(nproc) --compilation_mode=opt --strip=always --linkopt=-fuse-ld=lld //common:kernel_aarch64_dist --action_env=KCFLAGS="-ferror-limit=0" --verbose_failures -- --dist_dir=dist
+         tools/bazel run --config=fast --config=stamp --lto=thin --copt=-O${{ matrix.optimizer_level }} --jobs=$(nproc) --compilation_mode=opt --strip=always --linkopt=-fuse-ld=lld //common:kernel_aarch64_dist -- --dist_dir=dist
 
       - name: Generate Kernel lmages
         run: |
