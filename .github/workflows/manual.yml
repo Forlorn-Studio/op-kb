@@ -23,7 +23,7 @@ jobs:
  # ============== 新增聚合 Release 的作业 ============== #
   create-unified-release:
     needs: [generate-timestamp, build]
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: ubuntu-latest
     if: ${{ needs.generate-timestamp.outputs.timestamp != '' }}
     
     steps:
