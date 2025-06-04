@@ -74,8 +74,6 @@ jobs:
           bazelisk-cache: true
           # Store build cache per workflow.
           disk-cache: ${{ github.workflow }}
-          # Share repository cache between workflows.
-          repository-cache: true
           
       - name: Configure Git
         run: |
