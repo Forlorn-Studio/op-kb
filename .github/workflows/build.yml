@@ -86,15 +86,33 @@ jobs:
           chmod a+x ~/repo
           sudo mv ~/repo /usr/local/bin/repo
 
-      - name: Initialize repo and sync
+      - name: Cache .repo folder
+        id: cache-repo
+        uses: actions/cache@v4
+        with:
+          path: kernel_workspace/.repo
+          key: repo-${{ inputs.CPU }}-${{ matrix.FEIL }}-${{ hashFiles('.github/manifest/${{ matrix.FEIL }}.xml') }}
+
+      - name: Initialize repo and sync (if cache miss)
         if: steps.cache-repo.outputs.cache-hit != 'true'
         run: |
           mkdir -p kernel_workspace && cd kernel_workspace
-          repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b refs/heads/oneplus/${{ inputs.CPU }} -m ${{ matrix.FEIL }}.xml --depth=1
-          repo --trace sync -c -j$(nproc --all) --no-tags
-          rm kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
-          rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
-         
+          repo init -u https://github.com/OnePlusOSS/kernel_manifest.git \
+          -b refs/heads/oneplus/${{ inputs.CPU }} \
+          -m ${{ matrix.FEIL }}.xml --depth=1 --no-repo-verify
+          repo sync -c -j$(nproc) --no-tags
+
+      - name: Resume repo sync (if cache hit)
+        if: steps.cache-repo.outputs.cache-hit == 'true'
+        run: |
+          cd kernel_workspace
+          repo sync -c -j$(nproc) --no-tags
+    
+      - name: Cleanup protected exports
+        run: |
+          rm kernel_workspace/kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
+          rm kernel_workspace/kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
+    
       - name: SukiSU-Ultra & SukiSU version
         if: ${{ inputs.kernelsu_variant == 'SukiSU-Ultra' || inputs.kernelsu_variant == 'SukiSU' }}
         run: |
