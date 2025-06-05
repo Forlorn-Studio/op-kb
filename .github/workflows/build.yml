@@ -74,15 +74,6 @@ jobs:
           bazelisk-cache: true
           # Store build cache per workflow.
           disk-cache: ${{ github.workflow }}
-          bazelrc: |
-            build --config=fast
-            build --config=stamp
-            build --copt=-flto=thin
-            build --copt=-O${{ matrix.optimizer_level }}
-            build --strip=always
-            build --linkopt=-fuse-ld=lld
-            build --compilation_mode=opt
-            build --jobs=auto
           
       - name: Configure Git
         run: |
@@ -254,7 +245,7 @@ jobs:
       - name: Build kernel
         run: |
           cd kernel_workspace/kernel_platform
-          tools/bazel run //common:kernel_aarch64_dist -- --dist_dir=dist
+          tools/bazel run --config=fast --config=stamp --lto=thin --copt=-O${{ matrix.optimizer_level }} --jobs=$(nproc) --compilation_mode=opt --strip=always --linkopt=-fuse-ld=lld //common:kernel_aarch64_dist -- --dist_dir=dist
 
       - name: Generate Kernel lmages
         run: |
